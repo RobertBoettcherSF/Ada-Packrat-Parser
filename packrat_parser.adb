@@ -37,8 +37,8 @@ package body Packrat_Parser is
    begin
       case Rule.Kind is
          when Match_Char =>
-            if Pos <= Text_Index (Input'Last)
-              and then Input (Positive (Pos)) = Rule.Target_Char
+            if Integer (Pos) <= Input'Last
+              and then Input (Integer (Pos)) = Rule.Target_Char
             then
                return (Success, Pos + 1);
             else
@@ -46,7 +46,7 @@ package body Packrat_Parser is
             end if;
 
          when Match_Any =>
-            if Pos <= Text_Index (Input'Last) then
+            if Integer (Pos) <= Input'Last then
                return (Success, Pos + 1);
             else
                return (Status => Failure);
