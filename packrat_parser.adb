@@ -259,6 +259,14 @@ package body Packrat_Parser is
             Table (R, Idx) := (Status => Success, Next_Index => Res.Next_Index);
 
             loop
+               --  Clear the memo table for other rules at this position so they can
+               --  re-evaluate and use the newly grown seed of R.
+               for K in Grammar'Range loop
+                  if K /= R then
+                     Table (K, Idx).Status := Unknown;
+                  end if;
+               end loop;
+
                declare
                   Next_Res : constant Parse_Result := Compute (Grammar, Input, R, Pos);
                begin
