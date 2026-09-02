@@ -150,12 +150,12 @@ begin
    -- TEST 11 - Naive Cycle Prevention
    Put_Line ("TEST 11 - Naive Parser Cycle Prevention (Left Recursion)");
    -- The Naive parser does NOT support left recursion.
-   -- It should fail without an infinite loop (stack overflow).
+   -- It should fail the left branch without an infinite loop (stack overflow), falling back to 'n'.
    Res := Parse_Naive (G_Left_Rec, "n+", 1);
-   Check ("11.1 Failed to parse left recursion gracefully", Res.Status = Failure);
+   Check ("11.1 Parsed base case but failed to grow left recursion", Res.Status = Success and then Res.Next_Index = 2);
    Check ("11.2 Protected from stack overflow (visited flag working)", True);
    Res := Parse_Packrat (G_Left_Rec, "n+", 1);
-   Check ("11.3 Standard Packrat also safely fails on left-recursion", Res.Status = Failure);
+   Check ("11.3 Standard Packrat safely falls back to base case", Res.Status = Success and then Res.Next_Index = 2);
 
    -- TEST 12 - Left Recursion Growth Packrat
    Put_Line ("TEST 12 - Advanced Left-Recursion Packrat");
